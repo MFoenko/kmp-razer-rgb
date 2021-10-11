@@ -1,5 +1,8 @@
 package data.lol.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RawChampionStats(
     val abilityHaste: Float?,
     val abilityPower: Float?,

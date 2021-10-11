@@ -1,5 +1,8 @@
 package data.lol.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RawPlayerInfo (
     val abilities: Map<String?, RawChampionAbility?>,
     val championStats: RawChampionStats,

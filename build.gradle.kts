@@ -3,8 +3,9 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.30"
-    id("org.jetbrains.compose") version "1.0.0-alpha3"
+    kotlin("jvm") version "1.5.31"
+    id("org.jetbrains.compose") version "1.0.0-alpha4-build362"
+    kotlin("plugin.serialization") version "1.5.31"
 }
 
 group = "me.mikhail"
@@ -19,18 +20,35 @@ repositories {
 }
 
 
-dependencies {
-    implementation(compose.desktop.currentOs)
-    implementation("io.ktor:ktor-client-core:$ktor_version")
-    implementation("io.ktor:ktor-client-curl:$ktor_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-}
 
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "11"
-}
+    dependencies {
+        //ui framework
+        implementation(compose.desktop.currentOs)
+        //library to make http requests
+        implementation("io.ktor:ktor-client-core:$ktor_version")
+        //engine for above library
+        implementation("io.ktor:ktor-client-apache:$ktor_version")
+        //library to create sslContext
+        implementation("io.github.hakky54:sslcontext-kickstart:7.0.2")
+        //library to create trust material for ssl context from .pem files
+        implementation("io.github.hakky54:sslcontext-kickstart-for-pem:7.0.2")
+        //library to parse json
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+        //library to use above library in http requests
+        implementation("io.ktor:ktor-client-serialization:$ktor_version")
+        //logging library
+        implementation("ch.qos.logback:logback-classic:1.2.6")
+        //library to use above library in http requests
+        implementation("io.ktor:ktor-client-logging:$ktor_version")
+        //library to write multithreaded code (to act on http responses without blocking thread)
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
+    }
 
-compose.desktop {
+    tasks.withType<KotlinCompile>() {
+        kotlinOptions.jvmTarget = "11"
+    }
+
+    compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
